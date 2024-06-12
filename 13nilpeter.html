@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>13 Nilpeter Status</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+    .speed-display {
+      font-size: 100px;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .speed-display span {
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      width: 200px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .speed-display span.red {
+      background-color: red;
+      color: white;
+    }
+    .speed-display span.orange {
+      background-color: orange;
+      color: white;
+    }
+    .speed-display span.yellow {
+      background-color: yellow;
+      color: black;
+    }
+    .speed-display span.green {
+      background-color: green;
+      color: white;
+    }
+    .speed-display span.gif {
+      background-image: url('https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmgwdmVydm1kNzBtNXhuYmJuNnl0eTYyZW94ajNsemw1Nnhyd3FnMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/da6Pwym8AaP5GlQd7W/giphy-downsized-large.gif');
+      background-size: cover;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="speed-display" id="speedDisplay">
+    <span class="press-name" id="pressName" style="color: #32CD32;">13 Nilpeter</span>
+    <span id="speedValue" class="red">0</span>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Firebase configuration
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY", // Add your API key here
+        authDomain: "realtime-database-8bbe2.com",
+        databaseURL: "https://realtime-database-8bbe2-default-rtdb.firebaseio.com",
+        projectId: "realtime-database-8bbe2",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com", // Replace with your actual storage bucket ID if available
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID", // Add your messaging sender ID if available
+        appId: "YOUR_APP_ID" // Add your app ID if available
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // Function to fetch and display current speed
+      function fetchCurrentSpeed(refPath, pressColor) {
+        const speedRef = database.ref(refPath);
+        const speedDisplay = document.getElementById('speedDisplay');
+        const speedValue = document.getElementById('speedValue');
+        const pressName = document.getElementById('pressName');
+        pressName.style.color = pressColor;
+
+        speedRef.on('value', (snapshot) => {
+          const speed = snapshot.val();
+          let speedClass = 'red';
+          if (speed >= 300) {
+            speedClass = 'gif';
+          } else if (speed >= 200) {
+            speedClass = 'green';
+          } else if (speed >= 100) {
+            speedClass = 'yellow';
+          } else if (speed > 0) {
+            speedClass = 'orange';
+          }
+          speedValue.className = speedClass;
+          speedValue.textContent = speed;
+        });
+      }
+
+      // Example usage for 13 Nilpeter
+      fetchCurrentSpeed('13Nilpeter/currentSpeed', '#32CD32');
+    });
+  </script>
+</body>
+</html>
